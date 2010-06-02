@@ -1,13 +1,13 @@
-<cfsilent>
-	<!--- API calls should not show any debugging information --->
-	<cfsetting showdebugoutput="false" />
+<!--- API calls should not show any debugging information --->
+<cfsetting showdebugoutput="false" />
+
+<cfscript>
+	profiler = request.managers.singleton.getProfiler();
 	
-	<cfset profiler = request.managers.singleton.getProfiler() />
+	profiler.start('startup');
 	
-	<cfset profiler.start('startup') />
-	
-	<!--- Setup a transport object to transport scopes --->
-	<cfset transport = {
+	// Setup a transport object to transport scopes
+	transport = {
 			theApplication = application,
 			theCGI = cgi,
 			theCookie = cookie,
@@ -16,40 +16,35 @@
 			theServer = server,
 			theSession = session,
 			theUrl = url
-		} />
+		};
 	
-	<!--- Retrieve the admin objects --->
-	<cfset i18n = transport.theApplication.managers.singleton.getI18N() />
-	<cfset objectSerial = transport.theApplication.managers.singleton.getObjectSerial() />
-	<cfset theURL = transport.theRequest.managers.singleton.getURL() />
-	<cfset response = transport.theApplication.factories.transient.getResponseForApi() />
+	// Retrieve the admin objects
+	i18n = transport.theApplication.managers.singleton.getI18N();
+	objectSerial = transport.theApplication.managers.singleton.getObjectSerial();
+	theURL = transport.theRequest.managers.singleton.getURL();
+	apiHandler = transport.theApplication.managers.singleton.getApiHandler();
+	apiRequest = transport.theApplication.factories.transient.getRequestForApi();
 	
-	<cfset profiler.stop('startup') />
+	profiler.stop('startup');
 	
-	<cfset profiler.start('processing') />
+	profiler.start('setup');
 	
-	<cftry>
-		<cfset response.setBody({
-				"test" = "Yippee!"
-			}) />
-		
-		<cfcatch>
-			<cfset response.setHead(
-				{
-					"result" = 0,
-					"errors" = {
-						"HEAD" = {
-							"sid" = {
-								"code" = "#cfcatch.errorCode#",
-								"message" = "#replace(cfcatch.message, '"', '\"', 'all')#"
-							}
-						}
-					}
-				}
-			) />
-		</cfcatch>
-	</cftry>
+	tempRequest = {
+		"HEAD" = {
+			"plugin" = "content",
+			"service" = "content",
+			"action" = "getPaths"
+		}
+	};
 	
-	<cfset profiler.stop('processing') />
-</cfsilent>
-<cfoutput>#response.getResponse()#</cfoutput>
+	apiRequest.setRequest(tempRequest);
+	
+	profiler.stop('setup');
+	
+	profiler.start('processing');
+	
+	apiResponse = apiHandler.handleRequest(transport, apiRequest);
+	
+	profiler.stop('processing');
+</cfscript>
+<cfoutput>#apiResponse.getResponse()#</cfoutput>

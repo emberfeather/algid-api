@@ -1,4 +1,7 @@
 {
+	"applicationSingletons": {
+		"apiHandler": "plugins.api.inc.resource.request.apiHandler"
+	},
 	"applicationTransients": {
 		"requestForApi": "algid.inc.resource.request.soapJrRequest",
 		"responseForApi": "algid.inc.resource.request.soapJrResponse"
