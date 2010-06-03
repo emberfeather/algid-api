@@ -29,6 +29,7 @@
 	
 	profiler.start('setup');
 	
+	// TODO Remove
 	tempRequest = {
 		"HEAD" = {
 			"plugin" = "content",
@@ -36,6 +37,20 @@
 			"action" = "getPaths"
 		}
 	};
+	
+	// Check for the head of the request
+	if(structKeyExists(transport.theUrl, 'head')) {
+		tempRequest.head = deserializeJSON(transport.theUrl.head);
+	} else if(structKeyExists(transport.theForm, 'head')) {
+		tempRequest.head = deserializeJSON(transport.theForm.head);
+	}
+	
+	// Check for the body of the request
+	if(structKeyExists(transport.theUrl, 'body')) {
+		tempRequest.head = deserializeJSON(transport.theUrl.body);
+	} else if(structKeyExists(transport.theForm, 'body')) {
+		tempRequest.head = deserializeJSON(transport.theForm.body);
+	}
 	
 	apiRequest.setRequest(tempRequest);
 	
