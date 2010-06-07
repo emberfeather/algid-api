@@ -1,54 +1,17 @@
-/**
- * Handles requests that come through for the api
- */
-component extends="cf-compendium.inc.resource.base.base" {
+<cfcomponent extends="cf-compendium.inc.resource.base.base" output="false">
+	<cfscript>
 	/**
 	 * Use the request information to find and call the proper api function.
 	 */
-	public component function handleRequest( struct transport, component apiRequest ) {
-		var apiRequestHead = '';
+	public component function handleRequest( struct transport ) {
 		var apiResponse = '';
-		var apiResponseHead = '';
 		var exception = '';
-		var result = '';
-		
-		apiResponse = arguments.transport.theApplication.factories.transient.getResponseForApi();
 		
 		try {
-			apiRequestHead = arguments.apiRequest.getHead();
-			
-			// Validate the basic request elements
-			if( !structKeyExists(apiRequestHead, 'plugin') ) {
-				throw('validation', 'Missing plugin', 'The API requires the plugin to be part of the request.');
-			}
-			
-			if( !structKeyExists(apiRequestHead, 'service') ) {
-				throw('validation', 'Missing service', 'The API requires the service to be part of the request.');
-			}
-			
-			if( !structKeyExists(apiRequestHead, 'action') ) {
-				throw('validation', 'Missing service action', 'The API requires the service action to be part of the request.');
-			}
-			
-			apiResponseHead = {
-				"plugin" = apiRequestHead.plugin,
-				"service" = apiRequestHead.service,
-				"action" = apiRequestHead.action,
-				"result" = 1
-			};
-			
-			// Determine the service to use
-			result = {
-				"testing" = 'Testing handler'
-			};
-			
-			if( isQuery(result) ) {
-				apiResponseHead['records'] = result.recordCount
-			}
-			
-			apiResponse.setHead(apiResponseHead);
-			apiResponse.setBody(result);
+			apiResponse = getApiResponse(arguments.transport);
 		} catch( validation exception ) {
+			apiResponse = arguments.transport.theApplication.factories.transient.getResponseForApi();
+			
 			apiResponse.setHead({
 				"result" = 0,
 				"errors" = {
@@ -63,6 +26,9 @@ component extends="cf-compendium.inc.resource.base.base" {
 			});
 		} catch( any exception ) {
 			// TODO log the error
+			dump(exception);
+			
+			apiResponse = arguments.transport.theApplication.factories.transient.getResponseForApi();
 			
 			apiResponse.setHead({
 				"result" = 0,
@@ -80,4 +46,58 @@ component extends="cf-compendium.inc.resource.base.base" {
 		
 		return apiResponse;
 	}
-}
+	</cfscript>
+	
+	<cffunction name="getApiResponse" access="private" returntype="component" output="false">
+		<cfargument name="transport" type="struct" required="true" />
+		
+		<cfscript>
+		var api = '';
+		var apiRequest = '';
+		var apiRequestTemp = { 'HEAD' = {}, 'BODY' = {} };
+		var apiResponse = '';
+		
+		apiRequest = arguments.transport.theApplication.factories.transient.getRequestForApi();
+		
+		// Check for the head of the request
+		if(structKeyExists(arguments.transport.theUrl, 'head')) {
+			apiRequestTemp.head = deserializeJSON(arguments.transport.theUrl.head);
+		} else if(structKeyExists(arguments.transport.theForm, 'head')) {
+			apiRequestTemp.head = deserializeJSON(arguments.transport.theForm.head);
+		}
+		
+		// Check for the body of the request
+		if(structKeyExists(arguments.transport.theUrl, 'body')) {
+			apiRequestTemp.head = deserializeJSON(arguments.transport.theUrl.body);
+		} else if(structKeyExists(arguments.transport.theForm, 'body')) {
+			apiRequestTemp.head = deserializeJSON(arguments.transport.theForm.body);
+		}
+		
+		apiRequest.setRequest(apiRequestTemp);
+		
+		// TODO Use validation object and regex
+		// Validate the basic request elements
+		if( !structKeyExists(apiRequestTemp.head, 'plugin') || !len(trim(apiRequestTemp.head.plugin)) ) {
+			throw('validation', 'Missing plugin', 'The API requires the plugin to be part of the request.');
+		}
+		
+		if( !structKeyExists(apiRequestTemp.head, 'service') || !len(trim(apiRequestTemp.head.service)) ) {
+			throw('validation', 'Missing service', 'The API requires the service to be part of the request.');
+		}
+		
+		if( !structKeyExists(apiRequestTemp.head, 'action') || !len(trim(apiRequestTemp.head.action)) ) {
+			throw('validation', 'Missing service action', 'The API requires the service action to be part of the request.');
+		}
+		</cfscript>
+		
+		<cfinvoke component="#arguments.transport.theApplication.factories.transient#" method="getApi#apiRequestTemp.head.service#For#apiRequestTemp.head.plugin#" returnvariable="api">
+			<cfinvokeargument name="datasource" value="#arguments.transport.theApplication.managers.singleton.getApplication().getDSUpdate()#" />
+			<cfinvokeargument name="transport" value="#arguments.transport#" />
+			<cfinvokeargument name="apiRequest" value="#apiRequest#" />
+		</cfinvoke>
+		
+		<cfinvoke component="#api#" method="#apiRequestTemp.head.action#" returnvariable="apiResponse" />
+		
+		<cfreturn apiResponse />
+	</cffunction>
+</cfcomponent>
