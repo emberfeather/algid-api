@@ -60,17 +60,17 @@
 		apiRequest = arguments.transport.theApplication.factories.transient.getRequestForApi();
 		
 		// Check for the head of the request
-		if(structKeyExists(arguments.transport.theUrl, 'head')) {
-			apiRequestTemp.head = deserializeJSON(arguments.transport.theUrl.head);
-		} else if(structKeyExists(arguments.transport.theForm, 'head')) {
+		if(structKeyExists(arguments.transport.theForm, 'head')) {
 			apiRequestTemp.head = deserializeJSON(arguments.transport.theForm.head);
+		} else if(structKeyExists(arguments.transport.theUrl, 'head')) {
+			apiRequestTemp.head = deserializeJSON(arguments.transport.theUrl.head);
 		}
 		
 		// Check for the body of the request
-		if(structKeyExists(arguments.transport.theUrl, 'body')) {
-			apiRequestTemp.head = deserializeJSON(arguments.transport.theUrl.body);
-		} else if(structKeyExists(arguments.transport.theForm, 'body')) {
-			apiRequestTemp.head = deserializeJSON(arguments.transport.theForm.body);
+		if(structKeyExists(arguments.transport.theForm, 'body')) {
+			apiRequestTemp.body = deserializeJSON(arguments.transport.theForm.body);
+		} else if(structKeyExists(arguments.transport.theUrl, 'body')) {
+			apiRequestTemp.body = deserializeJSON(arguments.transport.theUrl.body);
 		}
 		
 		apiRequest.setRequest(apiRequestTemp);

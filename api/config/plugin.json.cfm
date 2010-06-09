@@ -4,7 +4,8 @@
 	},
 	"applicationTransients": {
 		"requestForApi": "algid.inc.resource.request.soapJrRequest",
-		"responseForApi": "algid.inc.resource.request.soapJrResponse"
+		"responseForApi": "algid.inc.resource.request.soapJrResponse",
+		"urlForApi": "cf-compendium.inc.resource.utility.url"
 	},
 	"i18n": {
 		"locales": [
@@ -12,6 +13,7 @@
 		]
 	},
 	"key": "api",
+	"path": "api/",
 	"prerequisites": {
 	},
 	"version": "0.1.1"
