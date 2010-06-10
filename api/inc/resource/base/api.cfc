@@ -29,6 +29,8 @@ component extends="cf-compendium.inc.resource.base.base" {
 		// Check for a record count
 		if( isQuery(variables.apiResponseBody) ) {
 			variables.apiResponseHead['records'] = variables.apiResponseBody.recordCount;
+			
+			variables.apiResponseBody = convertQuery(variables.apiResponseBody);
 		} else if( isArray(variables.apiResponseBody) ) {
 			variables.apiResponseHead['records'] = arrayLen(variables.apiResponseBody);
 		}
@@ -37,5 +39,27 @@ component extends="cf-compendium.inc.resource.base.base" {
 		variables.apiResponse.setBody(variables.apiResponseBody);
 		
 		return variables.apiResponse;
+	}
+	
+	private array function convertQuery( query originalResults ) {
+		var i = '';
+		var j = '';
+		var results = [];
+		var resultKeys = '';
+		
+		resultKeys = listToArray(structKeyList(arguments.originalResults));
+		
+		// Convert the query to a better format for json
+		variables.apiResponseBody = [];
+		
+		for ( i = 1; i <= arguments.originalResults.recordCount; i++ ) {
+			results[i] = {}
+			
+			for ( j = 1; j <= arrayLen(resultKeys); j++ ) {
+				results[i][resultKeys[j]] = toString(arguments.originalResults[resultKeys[j]][i]);
+			}
+		}
+		
+		return results;
 	}
 }
