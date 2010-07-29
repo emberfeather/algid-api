@@ -19,6 +19,10 @@
 				theUrl = url
 			};
 		
+		// Create and store the services manager
+		services = transport.theApplication.factories.transient.getManagerService(transport);
+		transport.theRequest.managers.singleton.setManagerService(services);
+		
 		// Retrieve the admin objects
 		i18n = transport.theApplication.managers.singleton.getI18N();
 		objectSerial = transport.theApplication.managers.singleton.getObjectSerial();

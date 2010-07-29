@@ -7,6 +7,7 @@ component extends="cf-compendium.inc.resource.base.base" {
 		
 		variables.datasource = arguments.datasource;
 		variables.transport = arguments.transport;
+		variables.services = variables.transport.theRequest.managers.singleton.getManagerService();
 		variables.apiRequest = arguments.apiRequest;
 		variables.apiRequestHead = arguments.apiRequest.getHead();
 		variables.apiRequestBody = arguments.apiRequest.getBody();

@@ -91,7 +91,6 @@
 		</cfscript>
 		
 		<cfinvoke component="#arguments.transport.theApplication.factories.transient#" method="getApi#apiRequestTemp.head.service#For#apiRequestTemp.head.plugin#" returnvariable="api">
-			<cfinvokeargument name="datasource" value="#arguments.transport.theApplication.managers.singleton.getApplication().getDSUpdate()#" />
 			<cfinvokeargument name="transport" value="#arguments.transport#" />
 			<cfinvokeargument name="apiRequest" value="#apiRequest#" />
 		</cfinvoke>
