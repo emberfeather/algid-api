@@ -1,6 +1,6 @@
 {
-	"releaseNotes": "http://wiki.github.com/emberfeather/algid-api/ReleaseNotes",
-	"releaseURL": "http://github.com/emberfeather/algid-api/zipball/0.1.0",
+	"releaseNotes": "http://github.com/emberfeather/algid-api/wiki/Release-Notes",
+	"archive": "http://github.com/emberfeather/algid-api/tarball/0.1.0",
 	"URL": "http://github.com/emberfeather/algid-api",
 	"version": "0.1.0"
 }
