@@ -26,7 +26,6 @@
 			});
 		} catch( any exception ) {
 			// TODO log the error
-			dump(exception);
 			
 			apiResponse = arguments.transport.theApplication.factories.transient.getResponseForApi();
 			
@@ -56,6 +55,7 @@
 		var apiRequest = '';
 		var apiRequestTemp = { 'HEAD' = {}, 'BODY' = {} };
 		var apiResponse = '';
+		var apis = '';
 		
 		apiRequest = arguments.transport.theApplication.factories.transient.getRequestForApi();
 		
@@ -88,12 +88,11 @@
 		if( !structKeyExists(apiRequestTemp.head, 'action') || !len(trim(apiRequestTemp.head.action)) ) {
 			throw('validation', 'Missing service action', 'The API requires the service action to be part of the request.');
 		}
-		</cfscript>
 		
-		<cfinvoke component="#arguments.transport.theApplication.factories.transient#" method="getApi#apiRequestTemp.head.service#For#apiRequestTemp.head.plugin#" returnvariable="api">
-			<cfinvokeargument name="transport" value="#arguments.transport#" />
-			<cfinvokeargument name="apiRequest" value="#apiRequest#" />
-		</cfinvoke>
+		apis = arguments.transport.theRequest.managers.singleton.getManagerApi();
+		
+		api = apis.get(apiRequestTemp.head.plugin, apiRequestTemp.head.service, apiRequest);
+		</cfscript>
 		
 		<cfinvoke component="#api#" method="#apiRequestTemp.head.action#" returnvariable="apiResponse" />
 		

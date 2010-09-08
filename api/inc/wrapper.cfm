@@ -34,6 +34,10 @@
 		models = transport.theApplication.factories.transient.getManagerModel(transport, i18n, locale);
 		transport.theRequest.managers.singleton.setManagerModel(models);
 		
+		// Create and store the api manager
+		apis = transport.theApplication.factories.transient.getManagerApi(transport);
+		transport.theRequest.managers.singleton.setManagerApi(apis);
+		
 		profiler.stop('startup');
 		
 		profiler.start('processing');
