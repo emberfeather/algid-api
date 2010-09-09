@@ -36,7 +36,8 @@
 						"error" = {
 							"code" = exception.errorCode,
 							"message" = exception.message,
-							"detail" = exception.detail
+							"detail" = exception.detail,
+							"stacktrace" = exception.stacktrace
 						}
 					}
 				}
@@ -94,7 +95,7 @@
 		api = apis.get(apiRequestTemp.head.plugin, apiRequestTemp.head.service, apiRequest);
 		</cfscript>
 		
-		<cfinvoke component="#api#" method="#apiRequestTemp.head.action#" returnvariable="apiResponse" />
+		<cfinvoke component="#api#" method="#apiRequestTemp.head.action#" argumentcollection="#apiRequestTemp.body#" returnvariable="apiResponse" />
 		
 		<cfreturn apiResponse />
 	</cffunction>
