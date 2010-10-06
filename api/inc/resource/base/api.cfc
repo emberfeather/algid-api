@@ -1,8 +1,5 @@
 component extends="cf-compendium.inc.resource.base.base" {
-	/* required datasource */
-	/* required transport */
-	/* required apiRequest */
-	public component function init(struct datasource, struct transport, component apiRequest) {
+	public component function init(required struct datasource, required struct transport, required component apiRequest) {
 		super.init();
 		
 		variables.datasource = arguments.datasource;
