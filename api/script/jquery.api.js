@@ -1,7 +1,7 @@
 /**
  * API plugin
  */
-;(function($) {
+(function($) {
 	$.api = function(head, body, options) {
 		var opts = $.extend({}, $.api.defaults, options);
 		
@@ -18,4 +18,4 @@
 		type: 'post',
 		url: $.algid.admin.options.base.url + $.algid.admin.options.base.api
 	};
-})(jQuery);
+}(jQuery));
