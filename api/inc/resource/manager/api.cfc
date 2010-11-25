@@ -4,6 +4,7 @@
 		super.init();
 		
 		variables.transport = arguments.transport;
+		variables.datasource = variables.transport.theApplication.managers.singleton.getApplication().getDSUpdate();
 		
 		return this;
 	}
@@ -23,6 +24,7 @@
 		
 		<cfif hasTransient>
 			<cfinvoke component="#variables.transport.theApplication.factories.transient#" method="getApi#arguments.api#for#arguments.plugin#" returnvariable="temp">
+				<cfinvokeargument name="datasource" value="#variables.datasource#" />
 				<cfinvokeargument name="transport" value="#variables.transport#" />
 				<cfinvokeargument name="apiRequest" value="#arguments.apiRequest#" />
 			</cfinvoke>
@@ -33,7 +35,7 @@
 				<cfinvokeargument name="transport" value="plugins.#arguments.plugin#.extend.api.api.api#arguments.api#" />
 			</cfinvoke>
 			
-			<cfreturn createObject('component', 'plugins.' & arguments.plugin & '.extend.api.api.api' & arguments.api).init(variables.transport, arguments.apiRequest) />
+			<cfreturn createObject('component', 'plugins.' & arguments.plugin & '.extend.api.api.api' & arguments.api).init(variables.datasource, variables.transport, arguments.apiRequest) />
 		<cfelse>
 			<cfthrow message="Missing Api" detail="Could not find the #arguments.api# api for the #arguments.plugin# plugin" />
 		</cfif>
