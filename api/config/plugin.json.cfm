@@ -15,6 +15,7 @@
 	},
 	"key": "api",
 	"path": "api/",
+	"plugin": "API",
 	"prerequisites": {
 	},
 	"version": "0.1.1"
