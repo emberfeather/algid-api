@@ -22,7 +22,7 @@
 		// Retrieve the admin objects
 		i18n = transport.theApplication.managers.singleton.getI18N();
 		locale = transport.theSession.managers.singleton.getSession().getLocale();
-		objectSerial = transport.theApplication.managers.singleton.getObjectSerial();
+		modelSerial = transport.theApplication.factories.transient.getModelSerial(transport);
 		theURL = transport.theRequest.managers.singleton.getURL();
 		apiHandler = transport.theApplication.managers.singleton.getApiHandler();
 		
