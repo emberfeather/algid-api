@@ -21,9 +21,22 @@
 		
 		// Retrieve the admin objects
 		i18n = transport.theApplication.managers.singleton.getI18N();
-		objectSerial = transport.theApplication.managers.singleton.getObjectSerial();
+		locale = transport.theSession.managers.singleton.getSession().getLocale();
+		modelSerial = transport.theApplication.factories.transient.getModelSerial(transport);
 		theURL = transport.theRequest.managers.singleton.getURL();
 		apiHandler = transport.theApplication.managers.singleton.getApiHandler();
+		
+		// Create and store the services manager
+		services = transport.theApplication.factories.transient.getManagerService(transport);
+		transport.theRequest.managers.singleton.setManagerService(services);
+		
+		// Create and store the model manager
+		models = transport.theApplication.factories.transient.getManagerModel(transport, i18n, locale);
+		transport.theRequest.managers.singleton.setManagerModel(models);
+		
+		// Create and store the api manager
+		apis = transport.theApplication.factories.transient.getManagerApi(transport);
+		transport.theRequest.managers.singleton.setManagerApi(apis);
 		
 		profiler.stop('startup');
 		

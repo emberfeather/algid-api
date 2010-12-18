@@ -13,11 +13,7 @@
 		<cfreturn reFind('^' & path & '[a-zA-Z0-9-\.]*.cfm$', arguments.targetPage) GT 0 />
 	</cffunction>
 <cfscript>
-	/* required theApplication */
-	/* required theSession */
-	/* required theRequest */
-	/* required targetPage */
-	public void function onRequestStart(struct theApplication, struct theSession, struct theRequest, string targetPage) {
+	public void function onRequestStart(required struct theApplication, required struct theSession, required struct theRequest, required string targetPage) {
 		var app = '';
 		var plugin = '';
 		var temp = '';
@@ -25,7 +21,7 @@
 		// Only do the following if in the admin area
 		if (inApi( arguments.theApplication, arguments.targetPage )) {
 			// Create a profiler object
-			temp = arguments.theApplication.factories.transient.getProfiler(not arguments.theApplication.managers.singleton.getApplication().isProduction());
+			temp = arguments.theApplication.factories.transient.getProfiler(arguments.theApplication.managers.singleton.getApplication().isDevelopment());
 			
 			arguments.theRequest.managers.singleton.setProfiler( temp );
 			

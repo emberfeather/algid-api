@@ -26,7 +26,6 @@
 			});
 		} catch( any exception ) {
 			// TODO log the error
-			dump(exception);
 			
 			apiResponse = arguments.transport.theApplication.factories.transient.getResponseForApi();
 			
@@ -37,7 +36,8 @@
 						"error" = {
 							"code" = exception.errorCode,
 							"message" = exception.message,
-							"detail" = exception.detail
+							"detail" = exception.detail,
+							"stacktrace" = exception.stacktrace
 						}
 					}
 				}
@@ -56,6 +56,7 @@
 		var apiRequest = '';
 		var apiRequestTemp = { 'HEAD' = {}, 'BODY' = {} };
 		var apiResponse = '';
+		var apis = '';
 		
 		apiRequest = arguments.transport.theApplication.factories.transient.getRequestForApi();
 		
@@ -88,15 +89,13 @@
 		if( !structKeyExists(apiRequestTemp.head, 'action') || !len(trim(apiRequestTemp.head.action)) ) {
 			throw('validation', 'Missing service action', 'The API requires the service action to be part of the request.');
 		}
+		
+		apis = arguments.transport.theRequest.managers.singleton.getManagerApi();
+		
+		api = apis.get(apiRequestTemp.head.plugin, apiRequestTemp.head.service, apiRequest);
 		</cfscript>
 		
-		<cfinvoke component="#arguments.transport.theApplication.factories.transient#" method="getApi#apiRequestTemp.head.service#For#apiRequestTemp.head.plugin#" returnvariable="api">
-			<cfinvokeargument name="datasource" value="#arguments.transport.theApplication.managers.singleton.getApplication().getDSUpdate()#" />
-			<cfinvokeargument name="transport" value="#arguments.transport#" />
-			<cfinvokeargument name="apiRequest" value="#apiRequest#" />
-		</cfinvoke>
-		
-		<cfinvoke component="#api#" method="#apiRequestTemp.head.action#" returnvariable="apiResponse" />
+		<cfinvoke component="#api#" method="#apiRequestTemp.head.action#" argumentcollection="#apiRequestTemp.body#" returnvariable="apiResponse" />
 		
 		<cfreturn apiResponse />
 	</cffunction>

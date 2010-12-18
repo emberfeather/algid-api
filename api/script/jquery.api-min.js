@@ -1,0 +1,1 @@
+(function(a){a.api=function(c,d,b){b=a.extend({},a.api.defaults,b);b.data={HEAD:JSON.stringify(c),BODY:JSON.stringify(d)};a.ajax(b)};a.api.defaults={dataType:"json",type:"post",url:a.algid.admin.options.base.url+a.algid.admin.options.base.api}})(jQuery);
