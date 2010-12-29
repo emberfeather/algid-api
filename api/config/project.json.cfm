@@ -17,6 +17,7 @@
 	"path": "api/",
 	"plugin": "API",
 	"prerequisites": {
+		"algid": "0.1.3"
 	},
 	"version": "0.1.1"
 }
