@@ -37,7 +37,10 @@
 			app = arguments.theApplication.managers.singleton.getApplication();
 			plugin = arguments.theApplication.managers.plugin.getApi();
 			
-			options = { start = app.getPath() & plugin.getPath() };
+			arguments.theRequest.webRoot =  app.getPath();
+			arguments.theRequest.requestRoot =  plugin.getPath();
+			
+			options = { start = arguments.theRequest.webRoot & arguments.theRequest.requestRoot };
 			
 			rewrite = plugin.getRewrite();
 			
