@@ -15,8 +15,11 @@
 <cfscript>
 	public void function onRequestStart(required struct theApplication, required struct theSession, required struct theRequest, required string targetPage) {
 		var app = '';
+		var options = '';
 		var plugin = '';
+		var rewrite = '';
 		var temp = '';
+		var theUrl = '';
 		
 		// Only do the following if in the admin area
 		if (inApi( arguments.theApplication, arguments.targetPage )) {
@@ -33,9 +36,20 @@
 			// Create the URL object for all the admin requests
 			app = arguments.theApplication.managers.singleton.getApplication();
 			plugin = arguments.theApplication.managers.plugin.getApi();
-			temp = arguments.theApplication.factories.transient.getUrlForApi(arguments.theUrl, { start = app.getPath() & plugin.getPath() & '?' });
 			
-			arguments.theRequest.managers.singleton.setUrl( temp );
+			options = { start = app.getPath() & plugin.getPath() };
+			
+			rewrite = plugin.getRewrite();
+			
+			if(rewrite.isEnabled) {
+				options.rewriteBase = rewrite.base;
+				
+				theUrl = arguments.theApplication.factories.transient.getUrlRewrite(arguments.theUrl, options);
+			} else {
+				theUrl = arguments.theApplication.factories.transient.getUrl(arguments.theUrl, options);
+			}
+			
+			arguments.theRequest.managers.singleton.setUrl( theUrl );
 		}
 	}
 </cfscript>
