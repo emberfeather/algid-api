@@ -23,11 +23,6 @@
 		
 		// Only do the following if in the admin area
 		if (inApi( arguments.theApplication, arguments.targetPage )) {
-			// Create a profiler object
-			temp = arguments.theApplication.factories.transient.getProfiler(arguments.theApplication.managers.singleton.getApplication().isDevelopment());
-			
-			arguments.theRequest.managers.singleton.setProfiler( temp );
-			
 			// Default base
 			if ( !structKeyExists(url, '_base') ) {
 				url['_base'] = '/index';
