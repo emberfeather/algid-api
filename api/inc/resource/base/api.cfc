@@ -16,6 +16,27 @@ component extends="cf-compendium.inc.resource.base.base" {
 	}
 	
 	/**
+	 * Adds a message to the response header.
+	 * 
+	 * Can also be used for errors, warnings, successes, etc.
+	 **/
+	public void function addNotifications(required any messages, string type = 'message') {
+		var i = 0;
+		
+		if(not structKeyExists(variables.apiResponseHead, arguments.type) || !isArray(variables.apiResponseHead[arguments.type])) {
+			variables.apiResponseHead[arguments.type] = [];
+		}
+		
+		if(not isArray(arguments.messages)) {
+			arguments.messages = [ arguments.messages ];
+		}
+		
+		for( i = 1; i <= arrayLen(arguments.messages); i++) {
+			arrayAppend(variables.apiResponseHead[arguments.type], arguments.messages[i]);
+		}
+	}
+	
+	/**
 	 * Generate the response object to send back
 	 */
 	public component function getApiResponse() {
