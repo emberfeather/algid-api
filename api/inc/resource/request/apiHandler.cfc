@@ -5,6 +5,7 @@
 	 */
 	public component function handleRequest( struct transport ) {
 		var apiResponse = '';
+		var errorLogger = '';
 		var exception = '';
 		var isDevelopment = '';
 		
