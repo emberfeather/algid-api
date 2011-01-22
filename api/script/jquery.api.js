@@ -24,7 +24,7 @@
 			if(original.success){
 				original.success(data, textStatus, XMLHttpRequest);
 			}
-		}
+		};
 		
 		// Bring in the data
 		opts.data = {
