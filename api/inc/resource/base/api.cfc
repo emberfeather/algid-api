@@ -16,7 +16,7 @@ component extends="cf-compendium.inc.resource.base.base" {
 	}
 	
 	/**
-	 * Adds a message to the response header.
+	 * Adds a notification to the response header.
 	 * 
 	 * Can also be used for errors, warnings, successes, etc.
 	 **/
