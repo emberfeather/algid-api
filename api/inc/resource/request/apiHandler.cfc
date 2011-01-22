@@ -6,6 +6,7 @@
 	public component function handleRequest( struct transport ) {
 		var apiResponse = '';
 		var exception = '';
+		var isDevelopment = '';
 		
 		try {
 			apiResponse = getApiResponse(arguments.transport);
@@ -25,9 +26,9 @@
 				}
 			});
 		} catch( any exception ) {
-			// TODO log the error
-			
 			apiResponse = arguments.transport.theApplication.factories.transient.getResponseForApi();
+			
+			isDevelopment = arguments.transport.theApplication.managers.singleton.getApplication().isDevelopment();
 			
 			apiResponse.setHead({
 				"result" = 0,
@@ -37,11 +38,24 @@
 							"code" = exception.errorCode,
 							"message" = exception.message,
 							"detail" = exception.detail,
-							"stacktrace" = exception.stacktrace
+							"stacktrace" = (isDevelopment ? exception.stacktrace : '' )
 						}
 					}
 				}
 			});
+			
+			// Track/dump the exception
+			if (!isDevelopment) {
+				try {
+					errorLogger = arguments.transport.theApplication.managers.singleton.getErrorLog();
+					
+					errorLogger.log(err);
+				} catch (any err) {
+					// Failed to log error, send report of unlogged error
+					
+					// TODO Send Unlogged Error
+				}
+			}
 		}
 		
 		return apiResponse;
