@@ -23,6 +23,8 @@
 			triggerAlert(data.HEAD.successes, 'successes', opts.triggerElement);
 			triggerAlert(data.HEAD.messages, 'messages', opts.triggerElement);
 		});
+		
+		return request;
 	};
 	
 	$.api.defaults = {
