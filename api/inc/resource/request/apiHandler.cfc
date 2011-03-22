@@ -27,6 +27,10 @@
 				}
 			});
 		} catch( any exception ) {
+			getPageContext().getResponse().setStatus(500, 'Internal Server Error');
+			
+			arguments.transport.theApplication.managers.singleton.getErrorLog().log(exception);
+			
 			apiResponse = arguments.transport.theApplication.factories.transient.getResponseForApi();
 			
 			isDevelopment = arguments.transport.theApplication.managers.singleton.getApplication().isDevelopment();
@@ -44,19 +48,6 @@
 					}
 				}
 			});
-			
-			// Track/dump the exception
-			if (!isDevelopment) {
-				try {
-					errorLogger = arguments.transport.theApplication.managers.singleton.getErrorLog();
-					
-					errorLogger.log(err);
-				} catch (any err) {
-					// Failed to log error, send report of unlogged error
-					
-					// TODO Send Unlogged Error
-				}
-			}
 		}
 		
 		return apiResponse;
