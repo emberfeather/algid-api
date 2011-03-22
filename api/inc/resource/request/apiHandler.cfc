@@ -85,15 +85,15 @@
 		// TODO Use validation object and regex
 		// Validate the basic request elements
 		if( !structKeyExists(apiRequestTemp.head, 'plugin') || !len(trim(apiRequestTemp.head.plugin)) ) {
-			throw('validation', 'Missing plugin', 'The API requires the plugin to be part of the request.');
+			throw(type = 'validation', message = 'Missing plugin', detail = 'The API requires the plugin to be part of the request.');
 		}
 		
 		if( !structKeyExists(apiRequestTemp.head, 'service') || !len(trim(apiRequestTemp.head.service)) ) {
-			throw('validation', 'Missing service', 'The API requires the service to be part of the request.');
+			throw(type = 'validation', message = 'Missing service', detail = 'The API requires the service to be part of the request.');
 		}
 		
 		if( !structKeyExists(apiRequestTemp.head, 'action') || !len(trim(apiRequestTemp.head.action)) ) {
-			throw('validation', 'Missing service action', 'The API requires the service action to be part of the request.');
+			throw(type = 'validation', message = 'Missing service action', detail = 'The API requires the service action to be part of the request.');
 		}
 		
 		apis = arguments.transport.theRequest.managers.singleton.getManagerApi();
