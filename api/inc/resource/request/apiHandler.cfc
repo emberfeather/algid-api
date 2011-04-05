@@ -29,7 +29,7 @@
 		} catch( any exception ) {
 			getPageContext().getResponse().setStatus(500, 'Internal Server Error');
 			
-			arguments.transport.theApplication.managers.singleton.getErrorLog().log(exception);
+			arguments.transport.theSession.managers.singleton.getErrorLog().log(exception);
 			
 			apiResponse = arguments.transport.theApplication.factories.transient.getResponseForApi();
 			
