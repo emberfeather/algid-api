@@ -1,5 +1,4 @@
-<cfcomponent extends="cf-compendium.inc.resource.base.base" output="false">
-	<cfscript>
+component extends="cf-compendium.inc.resource.base.base" {
 	/**
 	 * Use the request information to find and call the proper api function.
 	 */
@@ -52,12 +51,8 @@
 		
 		return apiResponse;
 	}
-	</cfscript>
 	
-	<cffunction name="getApiResponse" access="private" returntype="component" output="false">
-		<cfargument name="transport" type="struct" required="true" />
-		
-		<cfscript>
+	private component function getApiResponse(required struct transport) {
 		var api = '';
 		var apiRequest = '';
 		var apiRequestTemp = { 'HEAD' = {}, 'BODY' = {} };
@@ -99,10 +94,9 @@
 		apis = arguments.transport.theRequest.managers.singleton.getManagerApi();
 		
 		api = apis.get(apiRequestTemp.head.plugin, apiRequestTemp.head.service, apiRequest);
-		</cfscript>
 		
-		<cfinvoke component="#api#" method="#apiRequestTemp.head.action#" argumentcollection="#apiRequestTemp.body#" returnvariable="apiResponse" />
+		apiResponse = api[apiRequestTemp.head.action](argumentCollection = apiRequestTemp.body);
 		
-		<cfreturn apiResponse />
-	</cffunction>
-</cfcomponent>
+		return apiResponse;
+	}
+}
