@@ -99,7 +99,11 @@ component extends="cf-compendium.inc.resource.base.base" {
 		local.args = duplicate(apiRequestTemp.body);
 		local.args.__head = duplicate(apiRequestTemp.head);
 		
+		api.__onRequestStart(argumentCollection = local.args);
+		
 		apiResponse = api[apiRequestTemp.head.action](argumentCollection = local.args);
+		
+		api.__onRequestEnd(argumentCollection = local.args);
 		
 		return apiResponse;
 	}

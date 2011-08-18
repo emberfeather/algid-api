@@ -60,6 +60,14 @@ component extends="cf-compendium.inc.resource.base.base" {
 		return variables.apiResponse;
 	}
 	
+	public void function __onRequestStart( required struct __head ) {
+		// Do nothing
+	}
+	
+	public void function __onRequestEnd( required struct __head ) {
+		// Do nothing
+	}
+	
 	private array function convertQuery( query originalResults ) {
 		var i = '';
 		var j = '';
