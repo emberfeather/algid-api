@@ -4,7 +4,7 @@
 (function($) {
 	$.api = function(head, body, options) {
 		var original;
-		var opts = $.extend({}, $.api.defaults, options);
+		var opts = $.extend({}, $.api.defaults, options || {});
 		
 		// Bring in the data
 		opts.data = {
