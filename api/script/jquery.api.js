@@ -4,7 +4,7 @@
 (function($) {
 	$.api = function(head, body, options) {
 		var original;
-		var opts = $.extend({}, $.api.defaults, options);
+		var opts = $.extend({}, $.api.defaults, options || {});
 		
 		// Bring in the data
 		opts.data = {
@@ -17,7 +17,11 @@
 		// Add a callback to the ajax Deferred object
 		request.done(function(data, textStatus, XMLHttpRequest) {
 			// Trigger the events for api alerts
-			triggerAlert((!data.HEAD.result ? [ data.HEAD.errors.HEAD.error.message, data.HEAD.errors.HEAD.error.detail ] : undefined), 'errors', opts.triggerElement);
+			if(!data.HEAD.result) {
+				$.each(data.HEAD.errors.HEAD, function(index, value) {
+					triggerAlert([ value.message, value.detail ], 'errors', opts.triggerElement);
+				});
+			}
 			triggerAlert(data.HEAD.errors, 'errors', opts.triggerElement);
 			triggerAlert(data.HEAD.warnings, 'warnings', opts.triggerElement);
 			triggerAlert(data.HEAD.successes, 'successes', opts.triggerElement);

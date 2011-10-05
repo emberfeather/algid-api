@@ -77,8 +77,6 @@ component extends="cf-compendium.inc.resource.base.base" {
 		resultKeys = listToArray(structKeyList(arguments.originalResults));
 		
 		// Convert the query to a better format for json
-		variables.apiResponseBody = [];
-		
 		for ( i = 1; i <= arguments.originalResults.recordCount; i++ ) {
 			results[i] = {}
 			
