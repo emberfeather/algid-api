@@ -5,12 +5,26 @@
 	$.api = function(head, body, options) {
 		var original;
 		var opts = $.extend({}, $.api.defaults, options || {});
+		var beforeSend = opts.beforeSend || $.noop;
+		
+		// We will handle the beforeSend
+		delete opts.beforeSend;
 		
 		// Bring in the data
 		opts.data = {
 			HEAD: JSON.stringify(head),
 			BODY: JSON.stringify(body)
 		};
+		
+		// Add a header for signaling an ajax request
+		opts.beforeSend: function(xhr){.
+			// Call the original beforeSend
+			if(beforeSend) {
+				beforeSend.apply(this, arguments);
+			}
+			
+			xhr.setRequestHeader("X-Ajax-Api", "true");
+		}
 		
 		var request = $.ajax( opts );
 		
