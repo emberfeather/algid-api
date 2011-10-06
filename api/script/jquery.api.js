@@ -17,7 +17,7 @@
 		};
 		
 		// Add a header for signaling an ajax request
-		opts.beforeSend: function(xhr){.
+		opts.beforeSend = function(xhr){
 			// Call the original beforeSend
 			if(beforeSend) {
 				beforeSend.apply(this, arguments);
