@@ -68,23 +68,35 @@ component extends="cf-compendium.inc.resource.base.base" {
 		// Do nothing
 	}
 	
-	private array function convertQuery( query originalResults ) {
-		var i = '';
-		var j = '';
-		var results = [];
-		var resultKeys = '';
-		
-		resultKeys = listToArray(structKeyList(arguments.originalResults));
-		
-		// Convert the query to a better format for json
-		for ( i = 1; i <= arguments.originalResults.recordCount; i++ ) {
-			results[i] = {}
+	private any function convertQuery( any original ) {
+		if(isQuery(arguments.original)) {
+			local.results = [];
+			local.resultKeys = listToArray(structKeyList(arguments.original));
 			
-			for ( j = 1; j <= arrayLen(resultKeys); j++ ) {
-				results[i][resultKeys[j]] = toString(arguments.originalResults[resultKeys[j]][i]);
+			// Convert the query to a better format for json
+			for ( local.i = 1; i <= arguments.original.recordCount; local.i++ ) {
+				local.results[local.i] = {}
+				
+				for ( j = 1; j <= arrayLen(resultKeys); j++ ) {
+					local.results[local.i][resultKeys[j]] = toString(arguments.original[resultKeys[j]][i]);
+				}
 			}
+			
+			return local.results;
+		} else if (isStruct(arguments.original)) {
+			local.keys = listToArray(structKeyList(arguments.original));
+			
+			for(local.i = 1; local.i <= arrayLen(local.keys); local.i++) {
+				local.item = arguments.original[local.keys[local.i]];
+				
+				if(isQuery(local.item) || isStruct(local.item)) {
+					arguments.original[local.keys[local.i]] = convertQuery(local.item);
+				}
+			}
+			
+			return arguments.original;
 		}
 		
-		return results;
+		throw(message='Unable to convert the input as a query');
 	}
 }
