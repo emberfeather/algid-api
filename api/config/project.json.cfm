@@ -22,5 +22,5 @@
 		"isEnabled": false,
 		"base": "_base"
 	},
-	"version": "0.1.7"
+	"version": "0.1.8"
 }
