@@ -78,7 +78,11 @@ component extends="cf-compendium.inc.resource.base.base" {
 				local.results[local.i] = {}
 				
 				for ( j = 1; j <= arrayLen(resultKeys); j++ ) {
-					local.results[local.i][resultKeys[j]] = toString(arguments.original[resultKeys[j]][i]);
+					if(isDate(arguments.original[resultKeys[j]][i])) {
+						local.results[local.i][resultKeys[j]] = getHttpTimeString(arguments.original[resultKeys[j]][i]);
+					} else {
+						local.results[local.i][resultKeys[j]] = toString(arguments.original[resultKeys[j]][i]);
+					}
 				}
 			}
 			
