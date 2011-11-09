@@ -95,9 +95,10 @@ component extends="cf-compendium.inc.resource.base.base" {
 		
 		api = apis.get(apiRequestTemp.head.plugin, apiRequestTemp.head.service, apiRequest);
 		
-		// Make a duplicate of the body of the request and add in the head so that it can be referenced in the handler
-		local.args = duplicate(apiRequestTemp.body);
-		local.args.__head = duplicate(apiRequestTemp.head);
+		local.args = apiRequestTemp.body;
+		
+		// Add in the head so that it can be referenced in the handler
+		local.args.__head = apiRequestTemp.head;
 		
 		api.__onRequestStart(argumentCollection = local.args);
 		
