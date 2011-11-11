@@ -95,6 +95,10 @@ component extends="cf-compendium.inc.resource.base.base" {
 		
 		api = apis.get(apiRequestTemp.head.plugin, apiRequestTemp.head.service, apiRequest);
 		
+		if(!structKeyExists(api, apiRequestTemp.head.action)) {
+			throw(type = 'validation', message = 'Invalid service action', detail = 'The API service action requested does not exist.');
+		}
+		
 		local.args = apiRequestTemp.body;
 		
 		// Add in the head so that it can be referenced in the handler
