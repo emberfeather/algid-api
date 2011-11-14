@@ -48,10 +48,13 @@ component extends="cf-compendium.inc.resource.base.base" {
 		// Check for a record count
 		if( isQuery(variables.apiResponseBody) ) {
 			variables.apiResponseHead['records'] = variables.apiResponseBody.recordCount;
-			
-			variables.apiResponseBody = convertQuery(variables.apiResponseBody);
 		} else if( isArray(variables.apiResponseBody) ) {
 			variables.apiResponseHead['records'] = arrayLen(variables.apiResponseBody);
+		}
+		
+		// Convert any nexted queries
+		if(!isSimpleValue(variables.apiResponseBody)) {
+			variables.apiResponseBody = convertQuery(variables.apiResponseBody);
 		}
 		
 		variables.apiResponse.setHead(variables.apiResponseHead);
@@ -101,6 +104,6 @@ component extends="cf-compendium.inc.resource.base.base" {
 			return arguments.original;
 		}
 		
-		throw(message='Unable to convert the input as a query');
+		return arguments.original;
 	}
 }
