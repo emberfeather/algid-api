@@ -71,7 +71,7 @@ component extends="cf-compendium.inc.resource.base.base" {
 		// Do nothing
 	}
 	
-	public any function convertQuery( any original ) {
+	private any function convertQuery( any original ) {
 		if(isQuery(arguments.original)) {
 			local.results = [];
 			local.resultKeys = listToArray(structKeyList(arguments.original));
@@ -98,6 +98,16 @@ component extends="cf-compendium.inc.resource.base.base" {
 				
 				if(isQuery(local.item) || isStruct(local.item)) {
 					arguments.original[local.keys[local.i]] = convertQuery(local.item);
+				}
+			}
+			
+			return arguments.original;
+		} else if (isArray(arguments.original)) {
+			for(local.i = 1; local.i <= arrayLen(arguments.original); local.i++) {
+				local.item = arguments.original[local.i];
+				
+				if(isQuery(local.item) || isStruct(local.item)) {
+					arguments.original[local.i] = convertQuery(local.item);
 				}
 			}
 			
