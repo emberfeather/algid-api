@@ -68,7 +68,7 @@ component extends="cf-compendium.inc.resource.base.base" {
 		// Do nothing
 	}
 	
-	private any function convertQuery( any original ) {
+	public any function convertQuery( any original ) {
 		if(isQuery(arguments.original)) {
 			local.results = [];
 			local.resultKeys = listToArray(structKeyList(arguments.original));
