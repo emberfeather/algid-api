@@ -95,9 +95,14 @@ component extends="cf-compendium.inc.resource.base.base" {
 		
 		api = apis.get(apiRequestTemp.head.plugin, apiRequestTemp.head.service, apiRequest);
 		
-		// Make a duplicate of the body of the request and add in the head so that it can be referenced in the handler
-		local.args = duplicate(apiRequestTemp.body);
-		local.args.__head = duplicate(apiRequestTemp.head);
+		if(!structKeyExists(api, apiRequestTemp.head.action)) {
+			throw(type = 'validation', message = 'Invalid service action', detail = 'The API service action requested does not exist.');
+		}
+		
+		local.args = apiRequestTemp.body;
+		
+		// Add in the head so that it can be referenced in the handler
+		local.args.__head = apiRequestTemp.head;
 		
 		api.__onRequestStart(argumentCollection = local.args);
 		
