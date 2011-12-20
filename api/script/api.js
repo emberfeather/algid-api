@@ -1,7 +1,18 @@
 /**
  * API plugin
  */
-(function($) {
+(function(factory) {
+	if (typeof define === 'function' && define.amd) {
+		// AMD Registration
+		define('plugins/api/script/api', [
+		        'jquery',
+		        '/cf-compendium/script/jquery.cookie.js'
+		        ], factory);
+	} else {
+		// Browser globals
+		factory(jQuery);
+	}
+}(function($) {
 	$.api = function(head, body, options) {
 		var original;
 		var opts = $.extend({}, $.api.defaults, options || {});
@@ -61,4 +72,4 @@
 			element.trigger('api.' + type, [type, alerts]);
 		}
 	}
-}(jQuery));
+}));
